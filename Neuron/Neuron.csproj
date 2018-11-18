@@ -13,7 +13,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Core\" />
-    <Folder Include="BasicNode\" />
+    <Folder Include="Util\" />
+    <Folder Include="Neurons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Reactive" Version="4.1.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="BasicNode\BasicNode.cs" />
+    <Compile Remove="ReactiveNode\ReactiveNode.cs" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
