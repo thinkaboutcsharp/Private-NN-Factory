@@ -34,7 +34,9 @@ namespace Weight.Util
         {
             get
             {
-                double value = (double)last / divider;
+                double lastValue;
+                lock (_lock_) { lastValue = last; }
+                double value = lastValue / divider;
                 if (UseNegative)
                 {
                     value -= 1.0d;
@@ -45,7 +47,7 @@ namespace Weight.Util
 
         public Random() : this((ulong)DateTime.Now.Ticks){}
 
-        public Random(ulong seed) : this(seed, seed){}
+        public Random(ulong seed) : this(seed, seed / 2ul){}
 
         public Random(ulong seed0, ulong seed1)
         {
@@ -55,7 +57,7 @@ namespace Weight.Util
             this.divider = ulong.MaxValue;
 
             UseNegative = false;
-            Scale = 1.0;
+            Scale = 1.0d;
 
             _lock_ = new object();
         }
