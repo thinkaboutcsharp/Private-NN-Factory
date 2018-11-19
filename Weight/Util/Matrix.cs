@@ -23,45 +23,19 @@ namespace Weight.Util
 
         public void InitZero()
         {
-            var initVectorTask = Task.Run(() =>
-            {
-                for (int c = 0; c < columns; c++)
-                {
-                    columnVectors[c] = new double[rows];
-                    for (int r = 0; r < rows; r++)
-                        columnVectors[c][r] = 0.0d;
-                }
-            });
-
-            var initTranspotedVectorTask = Task.Run(() =>
-            {
-                for (int r = 0; r < rows; r++)
-                {
-                    transposedColumnVectors[r] = new double[columns];
-                    for (int c = 0; c < columns; c++)
-                        transposedColumnVectors[r][c] = 0.0d;
-                }
-            });
-
-            Task.WaitAll(initVectorTask, initTranspotedVectorTask);
+            InitWithGenerator(new Zero());
         }
 
         public void InitRandom(ulong? seed0 = null, ulong? seed1 = null)
         {
-            Util.Random generator;
-            if (seed0.HasValue && seed1.HasValue) generator = new Random(seed0.Value, seed1.Value);
-            else if (seed0.HasValue) generator = new Random(seed0.Value);
-            else generator = new Random();
+            Random generator = GetRandom(seed0, seed1);
 
             InitWithGenerator(generator);
         }
 
         public void InitXavier(ulong? seed0 = null, ulong? seed1 = null)
         {
-            Util.Random generator;
-            if (seed0.HasValue && seed1.HasValue) generator = new Random(seed0.Value, seed1.Value);
-            else if (seed0.HasValue) generator = new Random(seed0.Value);
-            else generator = new Random();
+            Random generator = GetRandom(seed0, seed1);
 
             var sigma = 1.0d / Math.Sqrt(rows); //rows is lower layer number
             generator.Scale = sigma;
@@ -71,10 +45,7 @@ namespace Weight.Util
 
         public void InitHe(ulong? seed0 = null, ulong? seed1 = null)
         {
-            Util.Random generator;
-            if (seed0.HasValue && seed1.HasValue) generator = new Random(seed0.Value, seed1.Value);
-            else if (seed0.HasValue) generator = new Random(seed0.Value);
-            else generator = new Random();
+            Random generator = GetRandom(seed0, seed1);
 
             var sigma = Math.Sqrt(2.0d) / Math.Sqrt(rows); //rows is lower layer number
             generator.Scale = sigma;
@@ -82,7 +53,17 @@ namespace Weight.Util
             InitWithGenerator(generator);
         }
 
-        void InitWithGenerator(Random generator)
+        Random GetRandom(ulong? seed0, ulong? seed1)
+        {
+            Random generator;
+            if (seed0.HasValue && seed1.HasValue) generator = new Random(seed0.Value, seed1.Value);
+            else if (seed0.HasValue) generator = new Random(seed0.Value);
+            else generator = new Random();
+
+            return generator;
+        }
+
+        void InitWithGenerator(IGenerator generator)
         {
             Parallel.For(0, rows - 1, r =>
             {
@@ -145,6 +126,11 @@ namespace Weight.Util
             });
 
             return result;
+        }
+
+        class Zero : IGenerator
+        {
+            public double Next() => 0.0d;
         }
     }
 }

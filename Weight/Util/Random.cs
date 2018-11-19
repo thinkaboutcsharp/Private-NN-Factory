@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Weight.Util
 {
-    public class Random
+    public class Random : IGenerator
     {
         ulong state0;
         ulong state1;
