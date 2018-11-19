@@ -6,6 +6,7 @@ namespace Neuron.Neurons
         public SigmoidNeuron()
         {
             base.Activator = Util.MathUtil.Sigmoid;
+            base.ActivatorDelta = Util.MathUtil.SigmoidDelta;
         }
     }
 }

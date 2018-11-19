@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuron", "Neuron\Neuron.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weight", "Weight\Weight.csproj", "{1EEA1251-1B24-440F-8C5F-6EC9C9F5B5F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Layer", "Layer\Layer.csproj", "{D9F693F5-8937-4CB6-917D-601E37EC5174}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{1EEA1251-1B24-440F-8C5F-6EC9C9F5B5F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EEA1251-1B24-440F-8C5F-6EC9C9F5B5F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EEA1251-1B24-440F-8C5F-6EC9C9F5B5F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9F693F5-8937-4CB6-917D-601E37EC5174}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9F693F5-8937-4CB6-917D-601E37EC5174}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9F693F5-8937-4CB6-917D-601E37EC5174}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9F693F5-8937-4CB6-917D-601E37EC5174}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

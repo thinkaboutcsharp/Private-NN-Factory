@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Weight.Util
 {
@@ -17,20 +18,86 @@ namespace Weight.Util
             this.columns = columns;
 
             columnVectors = new double[columns][];
-            for (int c = 0; c < columns; c++)
+            transposedColumnVectors = new double[rows][];
+        }
+
+        public void InitZero()
+        {
+            var initVectorTask = Task.Run(() =>
+            {
+                for (int c = 0; c < columns; c++)
+                {
+                    columnVectors[c] = new double[rows];
+                    for (int r = 0; r < rows; r++)
+                        columnVectors[c][r] = 0.0d;
+                }
+            });
+
+            var initTranspotedVectorTask = Task.Run(() =>
+            {
+                for (int r = 0; r < rows; r++)
+                {
+                    transposedColumnVectors[r] = new double[columns];
+                    for (int c = 0; c < columns; c++)
+                        transposedColumnVectors[r][c] = 0.0d;
+                }
+            });
+
+            Task.WaitAll(initVectorTask, initTranspotedVectorTask);
+        }
+
+        public void InitRandom(ulong? seed0 = null, ulong? seed1 = null)
+        {
+            Util.Random generator;
+            if (seed0.HasValue && seed1.HasValue) generator = new Random(seed0.Value, seed1.Value);
+            else if (seed0.HasValue) generator = new Random(seed0.Value);
+            else generator = new Random();
+
+            InitWithGenerator(generator);
+        }
+
+        public void InitXavier(ulong? seed0 = null, ulong? seed1 = null)
+        {
+            Util.Random generator;
+            if (seed0.HasValue && seed1.HasValue) generator = new Random(seed0.Value, seed1.Value);
+            else if (seed0.HasValue) generator = new Random(seed0.Value);
+            else generator = new Random();
+
+            var sigma = 1.0d / Math.Sqrt(rows); //rows is lower layer number
+            generator.Scale = sigma;
+
+            InitWithGenerator(generator);
+        }
+
+        public void InitHe(ulong? seed0 = null, ulong? seed1 = null)
+        {
+            Util.Random generator;
+            if (seed0.HasValue && seed1.HasValue) generator = new Random(seed0.Value, seed1.Value);
+            else if (seed0.HasValue) generator = new Random(seed0.Value);
+            else generator = new Random();
+
+            var sigma = Math.Sqrt(2.0d) / Math.Sqrt(rows); //rows is lower layer number
+            generator.Scale = sigma;
+
+            InitWithGenerator(generator);
+        }
+
+        void InitWithGenerator(Random generator)
+        {
+            Parallel.For(0, rows - 1, r =>
+            {
+                transposedColumnVectors[r] = new double[columns];
+            });
+
+            Parallel.For(0, columns - 1, c =>
             {
                 columnVectors[c] = new double[rows];
                 for (int r = 0; r < rows; r++)
-                    columnVectors[c][r] = 0.0d;
-            }
-
-            transposedColumnVectors = new double[rows][];
-            for (int r = 0; r < rows; r++)
-            {
-                transposedColumnVectors[r] = new double[columns];
-                for (int c = 0; c < columns; c++)
-                    transposedColumnVectors[r][c] = 0.0d;
-            }
+                {
+                    columnVectors[c][r] = generator.Next();
+                    transposedColumnVectors[r][c] = columnVectors[c][r];
+                }
+            });
         }
 
         public void SetValue(int row, int column, double value)
@@ -48,7 +115,7 @@ namespace Weight.Util
         {
             var result = new double[columns];
 
-            for (int c = 0; c < columns; c++)
+            Parallel.For(0, columns - 1, c =>
             {
                 var columnVector = columnVectors[c];
                 double product = 0.0d;
@@ -57,7 +124,7 @@ namespace Weight.Util
                     product += vector[e] * columnVector[e];
                 }
                 result[c] = product;
-            }
+            });
 
             return result;
         }
@@ -66,7 +133,7 @@ namespace Weight.Util
         {
             var result = new double[rows];
 
-            for (int r = 0; r < rows; r++)
+            Parallel.For(0, rows - 1, r =>
             {
                 var columnVector = transposedColumnVectors[r];
                 double product = 0.0d;
@@ -75,7 +142,7 @@ namespace Weight.Util
                     product += vector[e] * columnVector[e];
                 }
                 result[r] = product;
-            }
+            });
 
             return result;
         }

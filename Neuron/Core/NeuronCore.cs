@@ -7,24 +7,25 @@ namespace Neuron.Core
     /// <summary>
     /// Neuron core architecture.
     /// </summary>
-    public abstract class NeuronCore : ICaptureNode, IEmitNode
+    public abstract class NeuronCore
     {
         public double InputValue { get; set; }
         public double ResultValue { get; set; }
 
         public Func<double, double> Activator { get; set; }
+        public Func<double, double> ActivatorDelta { get; set; }
 
-        public double GetOutput()
+        public double GetOutput(double input)
         {
-            InputValue = inputNode.GetOutput();
+            InputValue = input;
             ResultValue = Activator(InputValue);
             return ResultValue;
         }
 
-        public void SetInput(IEmitNode input)
+        public double GetGradient()
         {
-            inputNode = input;
+            var gradient = ActivatorDelta(ResultValue);
+            return gradient;
         }
-        IEmitNode inputNode;
     }
 }

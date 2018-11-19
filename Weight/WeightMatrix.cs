@@ -26,9 +26,9 @@ namespace Weight
             return weights.Dot(input);
         }
 
-        public double[] Back(double[] output)
+        public double[] Backward(double[] gradient)
         {
-            return weights.DotTransposed(output);
+            return weights.DotTransposed(gradient);
         }
     }
 }

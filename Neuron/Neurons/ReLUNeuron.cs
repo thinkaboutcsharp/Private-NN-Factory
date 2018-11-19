@@ -6,6 +6,7 @@ namespace Neuron.Neurons
         public ReLUNeuron()
         {
             base.Activator = Util.MathUtil.ReLU;
+            base.ActivatorDelta = Util.MathUtil.ReLUDelta;
         }
     }
 }
