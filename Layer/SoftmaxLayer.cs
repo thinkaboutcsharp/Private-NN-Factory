@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+
 namespace Layer
 {
     public class SoftmaxLayer : ILayer<double[]>
@@ -21,25 +23,21 @@ namespace Layer
             {
                 var inputExp = new double[NeuronNumber];
                 var adjustment = Util.MathUtil.Max(input);
-                var sum = 0.0d;
+                var sum = 1.0e-7;
                 for (int n = 0; n < NeuronNumber; n++)
                 {
                     inputExp[n] = Math.Exp(input[n] - adjustment);
                     sum += inputExp[n];
                 }
 
-                for (int n = 0; n < NeuronNumber; n++)
-                {
-                    results[n] = inputExp[n] / sum;
-                }
+                Parallel.For(0, NeuronNumber - 1, n => results[n] = inputExp[n] / sum);
                 inputExp = null;
             }
             else
             {
-                var sum = 0.0d;
+                var sum = 1.0e-7;
                 for (int n = 0; n < NeuronNumber; n++) sum += input[n];
-                for (int n = 0; n < NeuronNumber; n++)
-                    results[n] = input[n] / sum;
+                Parallel.For(0, NeuronNumber - 1, n => results[n] = input[n] / sum);
             }
             return results;
         }
@@ -47,8 +45,7 @@ namespace Layer
         public double[] Backword(double[] teacher)
         {
             var output = new double[NeuronNumber];
-            for (int n = 0; n < NeuronNumber; n++)
-                output[n] = results[n] - teacher[n];
+            Parallel.For(0, NeuronNumber - 1, n => output[n] = results[n] - teacher[n]);
             return output;
         }
     }

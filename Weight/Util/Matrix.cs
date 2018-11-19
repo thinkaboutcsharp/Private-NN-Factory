@@ -16,9 +16,6 @@ namespace Weight.Util
         {
             this.rows = rows;
             this.columns = columns;
-
-            columnVectors = new double[columns][];
-            transposedColumnVectors = new double[rows][];
         }
 
         public void InitZero()
@@ -65,6 +62,9 @@ namespace Weight.Util
 
         void InitWithGenerator(IGenerator generator)
         {
+            columnVectors = new double[columns][];
+            transposedColumnVectors = new double[rows][];
+
             Parallel.For(0, rows - 1, r =>
             {
                 transposedColumnVectors[r] = new double[columns];

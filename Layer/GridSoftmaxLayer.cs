@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+
 namespace Layer
 {
     public class GridSoftmaxLayer : ILayer<double[,]>
@@ -25,7 +27,7 @@ namespace Layer
             {
                 var inputExp = new double[RowNumber, ColumnNumber];
                 var adjustment = Util.MathUtil.Max(input);
-                var sum = 0.0d;
+                var sum = 1.0e-7;
                 for (int r = 0; r < RowNumber; r++)
                     for (int c = 0; c < ColumnNumber; c++)
                     {
@@ -33,23 +35,29 @@ namespace Layer
                         sum += inputExp[r, c];
                     }
 
-                for (int r = 0; r < RowNumber; r++)
+                Parallel.For(0, RowNumber - 1, r =>
+                {
                     for (int c = 0; c < ColumnNumber; c++)
                     {
                         results[r, c] = inputExp[r, c] / sum;
                     }
+                });
 
                 inputExp = null;
             }
             else
             {
-                var sum = 0.0d;
+                var sum = 1.0e-7;
                 for (int r = 0; r < RowNumber; r++)
                     for (int c = 0; c < ColumnNumber; c++)
                         sum += input[r, c];
-                for (int r = 0; r < RowNumber; r++)
+                Parallel.For(0, RowNumber - 1, r =>
+                {
                     for (int c = 0; c < ColumnNumber; c++)
+                    {
                         results[r, c] = input[r, c] / sum;
+                    }
+                });
             }
             return results;
         }
