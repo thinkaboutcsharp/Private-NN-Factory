@@ -7,28 +7,28 @@ namespace Layer
 {
     public class LinearLayer : ILayer<double[]>
     {
-        public int NeuronNumber { get; }
+        public int UnitNumber { get; }
 
         NeuronCore[] neurons;
 
         public LinearLayer(int neuronNumber, NeuronType type)
         {
-            NeuronNumber = neuronNumber;
+            UnitNumber = neuronNumber;
             neurons = new NeuronCore[neuronNumber];
-            Parallel.For(0, neuronNumber - 1, n => neurons[n] = NeuronFactory.Create(type));
+            Parallel.For(0, neuronNumber, n => neurons[n] = NeuronFactory.Create(type));
         }
 
         public double[] Forward(double[] input)
         {
-            var output = new double[NeuronNumber];
-            Parallel.For(0, NeuronNumber - 1, n => output[n] = neurons[n].GetOutput(input[n]));
+            var output = new double[UnitNumber];
+            Parallel.For(0, UnitNumber, n => output[n] = neurons[n].GetOutput(input[n]));
             return output;
         }
 
         public double[] Backword(double[] gradient)
         {
-            var output = new double[NeuronNumber];
-            Parallel.For(0, NeuronNumber - 1, n => output[n] = neurons[n].GetGradient() * gradient[n]);
+            var output = new double[UnitNumber];
+            Parallel.For(0, UnitNumber, n => output[n] = neurons[n].GetGradient() * gradient[n]);
             return output;
         }
     }

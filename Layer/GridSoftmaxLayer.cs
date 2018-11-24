@@ -5,7 +5,7 @@ namespace Layer
 {
     public class GridSoftmaxLayer : ILayer<double[,]>
     {
-        public int NeuronNumber { get; }
+        public int UnitNumber { get; }
         public int RowNumber { get; }
         public int ColumnNumber { get; }
         public bool IsLearning { get; set; }
@@ -16,7 +16,7 @@ namespace Layer
         {
             RowNumber = rows;
             ColumnNumber = columns;
-            NeuronNumber = rows * columns;
+            UnitNumber = rows * columns;
             IsLearning = isLearning;
             results = new double[rows, columns];
         }
@@ -35,7 +35,7 @@ namespace Layer
                         sum += inputExp[r, c];
                     }
 
-                Parallel.For(0, RowNumber - 1, r =>
+                Parallel.For(0, RowNumber, r =>
                 {
                     for (int c = 0; c < ColumnNumber; c++)
                     {
@@ -51,7 +51,7 @@ namespace Layer
                 for (int r = 0; r < RowNumber; r++)
                     for (int c = 0; c < ColumnNumber; c++)
                         sum += input[r, c];
-                Parallel.For(0, RowNumber - 1, r =>
+                Parallel.For(0, RowNumber, r =>
                 {
                     for (int c = 0; c < ColumnNumber; c++)
                     {

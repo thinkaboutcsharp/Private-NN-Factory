@@ -11,9 +11,15 @@ namespace Weight
         public WeightMatrix(int input, int output)
         {
             weights = new Util.Matrix(input, output);
+            weights.InitXavier();
             InputSize = input;
             OutputSize = output;
         }
+
+        public void InitZero() => weights.InitZero();
+        public void InitRandom(ulong? seed = null) => weights.InitRandom(seed);
+        public void InitXavier(ulong? seed0 = null, ulong? seed1 = null) => weights.InitXavier(seed0, seed1);
+        public void InitHe(ulong? seed0 = null, ulong? seed1 = null) => weights.InitHe(seed0, seed1);
 
         public double this[int row, int column]
         {

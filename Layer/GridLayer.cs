@@ -7,7 +7,7 @@ namespace Layer
 {
     public class GridLayer : ILayer<double[,]>
     {
-        public int NeuronNumber { get; }
+        public int UnitNumber { get; }
         public int RowNumber { get; }
         public int ColumnNumber { get; }
 
@@ -15,11 +15,11 @@ namespace Layer
 
         public GridLayer(int rows, int columns, NeuronType type)
         {
-            NeuronNumber = rows * columns;
+            UnitNumber = rows * columns;
             RowNumber = rows;
             ColumnNumber = columns;
             neurons = new NeuronCore[rows, columns];
-            Parallel.For(0, rows - 1, r =>
+            Parallel.For(0, rows, r =>
             {
                 for (int c = 0; c < columns; c++)
                     neurons[r, c] = NeuronFactory.Create(type);
@@ -29,7 +29,7 @@ namespace Layer
         public double[,] Forward(double[,] input)
         {
             var output = new double[RowNumber, ColumnNumber];
-            Parallel.For(0, RowNumber - 1, r =>
+            Parallel.For(0, RowNumber, r =>
             {
                 for (int c = 0; c < ColumnNumber; c++)
                     output[r, c] = neurons[r, c].GetOutput(input[r, c]);
@@ -40,7 +40,7 @@ namespace Layer
         public double[,] Backword(double[,] gradient)
         {
             var output = new double[RowNumber, ColumnNumber];
-            Parallel.For(0, RowNumber - 1, r =>
+            Parallel.For(0, RowNumber, r =>
             {
                 for (int c = 0; c < ColumnNumber; c++)
                     output[r, c] = neurons[r, c].GetGradient() * gradient[r, c];

@@ -10,7 +10,6 @@ namespace Weight.Util
         int rows;
         int columns;
         double[][] columnVectors;
-        double[][] transposedColumnVectors;
 
         public Matrix(int rows, int columns)
         {
@@ -63,20 +62,12 @@ namespace Weight.Util
         void InitWithGenerator(IGenerator generator)
         {
             columnVectors = new double[columns][];
-            transposedColumnVectors = new double[rows][];
-
-            Parallel.For(0, rows - 1, r =>
-            {
-                transposedColumnVectors[r] = new double[columns];
-            });
-
-            Parallel.For(0, columns - 1, c =>
+            Parallel.For(0, columns, c =>
             {
                 columnVectors[c] = new double[rows];
                 for (int r = 0; r < rows; r++)
                 {
                     columnVectors[c][r] = generator.Next();
-                    transposedColumnVectors[r][c] = columnVectors[c][r];
                 }
             });
         }
@@ -84,7 +75,6 @@ namespace Weight.Util
         public void SetValue(int row, int column, double value)
         {
             columnVectors[column][row] = value;
-            transposedColumnVectors[row][column] = value;
         }
 
         public double GetValue(int row, int column)
@@ -96,7 +86,7 @@ namespace Weight.Util
         {
             var result = new double[columns];
 
-            Parallel.For(0, columns - 1, c =>
+            Parallel.For(0, columns, c =>
             {
                 var columnVector = columnVectors[c];
                 double product = 0.0d;
@@ -114,13 +104,12 @@ namespace Weight.Util
         {
             var result = new double[rows];
 
-            Parallel.For(0, rows - 1, r =>
+            Parallel.For(0, rows, r =>
             {
-                var columnVector = transposedColumnVectors[r];
                 double product = 0.0d;
                 for (int e = 0; e < columns; e++)
                 {
-                    product += vector[e] * columnVector[e];
+                    product += vector[e] * columnVectors[e][r];
                 }
                 result[r] = product;
             });
