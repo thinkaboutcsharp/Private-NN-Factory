@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
 namespace Layer
 {
     public interface ILayer<T>
     {
-        int UnitNumber { get; }
-
         T Forward(T input);
         T Backword(T gradient);
     }

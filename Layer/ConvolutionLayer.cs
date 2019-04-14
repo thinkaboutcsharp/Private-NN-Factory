@@ -5,11 +5,11 @@ using Neuron.Core;
 
 namespace Layer
 {
-    public class ConvolutionLayer : ILayer<double[,,]>
+    public class ConvolutionLayer : ISquareLayer
     {
         public int UnitNumber { get; }
-        public int RowNumber { get; }
-        public int ColumnNumber { get; }
+        public int HeightUnitNumber { get; }
+        public int WidthUnitNumber { get; }
         public int Channels { get; }
 
         ConvolutionFilterSet filterSet;
@@ -17,8 +17,8 @@ namespace Layer
         public ConvolutionLayer(int rows, int columns, int filterWidth, int filterHeight, int channels, double[] biases, int stride = 1, int padding = 0, double paddingValue = 0d)
         {
             UnitNumber = rows * columns;
-            RowNumber = rows;
-            ColumnNumber = columns;
+            HeightUnitNumber = rows;
+            WidthUnitNumber = columns;
             Channels = channels;
             filterSet = new ConvolutionFilterSet(channels, filterWidth, filterHeight, biases, stride, padding, paddingValue);
         }

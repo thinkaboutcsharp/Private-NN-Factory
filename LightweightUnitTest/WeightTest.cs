@@ -5,10 +5,10 @@ namespace LightweightUnitTest
 {
     public class WeightTest : IDisposable
     {
-        Weight.WeightMatrix weight;
+        Weight.LinearWeight weight;
         public WeightTest()
         {
-            weight = new Weight.WeightMatrix(3, 3);
+            weight = new Weight.LinearWeight(3, 3);
             weight[0, 0] = 0.1d;
             weight[0, 1] = 0.2d;
             weight[0, 2] = 0.3d;

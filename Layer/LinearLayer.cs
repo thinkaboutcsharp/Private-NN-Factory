@@ -5,7 +5,7 @@ using Neuron.Core;
 
 namespace Layer
 {
-    public class LinearLayer : ILayer<double[]>
+    public class LinearLayer : ILinearLayer<double[]>
     {
         public int UnitNumber { get; }
 

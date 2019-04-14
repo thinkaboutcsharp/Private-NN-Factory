@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Layer
 {
-    public class SoftmaxLayer : ILayer<double[]>
+    public class SoftmaxLayer : ILinearLayer
     {
         public int UnitNumber { get; }
         public bool IsLearning { get; set; }

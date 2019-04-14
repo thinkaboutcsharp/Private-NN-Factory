@@ -16,7 +16,7 @@ namespace Neuron
                 case NeuronType.ReLU:
                     return new Neurons.ReLUNeuron();
             }
-            return null;
+            return new Neurons.LinearNeuron();
         }
     }
 }

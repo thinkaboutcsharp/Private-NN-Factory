@@ -1,28 +1,32 @@
 ﻿using System;
 namespace Layer
 {
-    public class PoolingLayer : ILayer<double[,]>
+    public class PoolingLayer : ISquareLayer
     {
         public int UnitNumber { get; }
-        public int RowNumber { get; }
-        public int ColumnNumber { get; }
+        public int HeightUnitNumber { get; }
+        public int WidthUnitNumber { get; }
+        public int Channels { get; }
+        public PoolingMethod Method { get; }
 
         PoolingWindow window;
 
-        public PoolingLayer(int rows, int columns, PoolingMethod method, int windowWidth, int windowHeight, int stride = 0)
+        public PoolingLayer(int rows, int columns, PoolingMethod method, int windowWidth, int windowHeight, int channels, int stride = 0)
         {
             UnitNumber = rows * columns;
-            RowNumber = rows;
-            ColumnNumber = columns;
+            HeightUnitNumber = rows;
+            WidthUnitNumber = columns;
+            Channels = channels;
+            Method = method;
             window = new PoolingWindow(windowWidth, windowHeight, stride);
         }
 
-        public double[,] Forward(double[,] input)
+        public double[,,] Forward(double[,,] input)
         {
             throw new NotImplementedException();
         }
 
-        public double[,] Backword(double[,] gradient)
+        public double[,,] Backword(double[,,] gradient)
         {
             throw new NotImplementedException();
         }

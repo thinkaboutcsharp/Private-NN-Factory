@@ -1,14 +1,14 @@
 ﻿using System;
 namespace Weight
 {
-    public class WeightMatrix
+    public class LinearWeight
     {
         public int InputSize { get; }
         public int OutputSize { get; }
 
         Util.Matrix weights;
 
-        public WeightMatrix(int input, int output)
+        public LinearWeight(int input, int output)
         {
             weights = new Util.Matrix(input, output);
             weights.InitXavier();

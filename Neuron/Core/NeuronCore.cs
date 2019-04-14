@@ -12,8 +12,8 @@ namespace Neuron.Core
         public double InputValue { get; set; }
         public double ResultValue { get; set; }
 
-        public Func<double, double> Activator { get; set; }
-        public Func<double, double> ActivatorDelta { get; set; }
+        public Func<double, double> Activator { get; set; } = null!;
+        public Func<double, double> ActivatorDelta { get; set; } = null!;
 
         public double GetOutput(double input)
         {
